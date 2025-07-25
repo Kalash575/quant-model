@@ -8,16 +8,24 @@ import yfinance as yf
 def load_live_data(symbol):
     df = yf.download(tickers=symbol, period="5d", interval="1m")
     return df
+    
+import time
 
-if __name__ == "__main__":
-    data = load_live_data("^NSEI")  # for Nifty 50
-    data = calculate_indicators(data)
-    strategy_flags = apply_strategies(data)
-    total_score = calculate_score(strategy_flags)
+while True:
+    try:
+        # Your model code here
+        data = load_live_data("^NSEI")
+        data = calculate_indicators(data)
+        flags = apply_strategies(data)
+        score = calculate_score(flags)
 
-    if total_score >= 18:
-        send_signal("✅ BUY Signal Triggered")
-    elif total_score <= -18:
-        send_signal("❌ SELL Signal Triggered")
+        if score >= 18:
+            send_signal("✅ BUY Signal")
+        elif score <= -18:
+            send_signal("🔻 SELL Signal")
 
-    update_model(strategy_flags, outcome="profit/loss")
+        update_model(flags, outcome="profit/loss")
+    except Exception as e:
+        print("⚠️ Error:", e)
+
+    time.sleep(300)  # Wait 5 minutes before next run
