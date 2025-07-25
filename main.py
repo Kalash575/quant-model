@@ -10,7 +10,7 @@ def load_live_data(symbol):
     return df
 
 if __name__ == "__main__":
-    data = load_live_data("NIFTY")
+    data = load_live_data("^NSEI")  # for Nifty 50
     data = calculate_indicators(data)
     strategy_flags = apply_strategies(data)
     total_score = calculate_score(strategy_flags)
